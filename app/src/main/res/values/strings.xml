@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ColdWeather</string>
+    <string name="searchPlaceEdithint">输入地址</string>
 </resources>
