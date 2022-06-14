@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.coldweather.android.MainActivity
 import com.coldweather.android.Toast
 import com.coldweather.android.databinding.FragmentPlaceBinding
 import com.coldweather.android.ui.weather.WeatherActivity
@@ -59,7 +60,7 @@ class placeFragment:Fragment() {
 
         super.onActivityCreated(savedInstanceState)
 
-        if(viewModel.isSavedPlace()){
+        if(activity is MainActivity && viewModel.isSavedPlace()){
 
             val place = viewModel.getSavedPlace()
 

@@ -3,12 +3,10 @@ package com.coldweather.android.ui.place
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.coldweather.android.databinding.PlaceItemBinding
 import com.coldweather.android.logic.model.Place
 import com.coldweather.android.ui.weather.WeatherActivity
-import  com.coldweather.android.ui.weather.*
+import com.coldweather.android.databinding.PlaceItemBinding
 
 // 这里的fragment改成placeFragment可以直接调用该viewModel
 class PlaceAdapter(private val places: List<Place>,private val fragment: placeFragment):RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
@@ -36,21 +34,46 @@ class PlaceAdapter(private val places: List<Place>,private val fragment: placeFr
 
             val place = places[position]
 
-            val intent = Intent(parent.context,WeatherActivity::class.java).apply {
+            val activity = fragment.activity
 
-                putExtra("place_name",place.name)
+            //这是绑定在WeatherActivity上执行的代码
+            if(activity is WeatherActivity){
 
-                putExtra("location_lng",place.location.lng)
+                activity.drawLayout?.closeDrawers()
 
-                putExtra("location_lat",place.location.lat)
+                activity.viewModel.locationLng = place.location.lng
+
+                activity.viewModel.locationLat = place.location.lat
+
+                activity.viewModel.placeName = place.name
+
+                //这里选择新的城市应该出现下拉刷新
+                //这样子界面比较好看
+                activity.refreshWeather()
+
+               //这里绑定在MainActivity上执行的代码
+            }else{
+
+
+                val intent = Intent(parent.context,WeatherActivity::class.java).apply {
+
+                    putExtra("place_name",place.name)
+
+                    putExtra("loaction_lng",place.location.lng)
+
+                    putExtra("location_lat",place.location.lat)
+
+
+                }
+
+                fragment.startActivity(intent)
+
+                activity?.finish()
 
             }
 
+            //不管是哪个Activity，都应还将place保存到sharedPreferences中
             fragment.viewModel.savePlace(place)
-
-            fragment.startActivity(intent)
-
-            fragment.activity?.finish()
 
         }
 

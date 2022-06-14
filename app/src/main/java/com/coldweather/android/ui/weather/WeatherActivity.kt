@@ -1,15 +1,23 @@
 package com.coldweather.android.ui.weather
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.inputmethodservice.InputMethodService
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.coldweather.android.R
 import com.coldweather.android.Toast
 import com.coldweather.android.databinding.ActivityWeatherBinding
 import com.coldweather.android.databinding.ForecastItemBinding
@@ -47,14 +55,21 @@ class WeatherActivity : AppCompatActivity() {
 
     private var weatherLayout:ScrollView?=null
 
+    private var swipeRefresh:SwipeRefreshLayout?=null
+
+    var drawLayout:DrawerLayout?=null
+
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         val binding = ActivityWeatherBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
+         drawLayout = binding.drawerLayout
+
+        swipeRefresh = binding.swipeRefresh
 
         placeName = binding.NowLayout.palceName
 
@@ -98,6 +113,36 @@ class WeatherActivity : AppCompatActivity() {
 
         }
 
+        binding.NowLayout.navBtn.setOnClickListener {
+
+            drawLayout?.openDrawer(GravityCompat.START)
+
+        }
+
+        drawLayout?.addDrawerListener(object :DrawerLayout.DrawerListener{
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerStateChanged(newState: Int) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+            //关闭滑动菜单的时候要注意关闭输入法
+            override fun onDrawerClosed(drawerView: View) {
+
+                val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+                //当滑动菜单的相关View关闭时，将输入法隐藏起来
+                //这里使用了InputMethodManager的隐藏方法
+                manager.hideSoftInputFromWindow(drawerView.windowToken,InputMethodManager.HIDE_NOT_ALWAYS)
+
+
+            }
+
+
+
+        })
+
         viewModel.weatherLiveData.observe(this){
 
             result ->
@@ -118,10 +163,20 @@ class WeatherActivity : AppCompatActivity() {
 
             }
 
+            swipeRefresh?.isRefreshing = false
+
+        }
+
+        swipeRefresh?.setColorSchemeColors(R.color.colorPrimary)
+
+        swipeRefresh?.setOnRefreshListener {
+
+            refreshWeather()
+
         }
 
         viewModel.resfreshWeather(viewModel.locationLng,viewModel.locationLat)
-        //用来出发liveData
+        //用来触发liveData
 
     }
 
@@ -200,6 +255,18 @@ class WeatherActivity : AppCompatActivity() {
         carwashingText?.text = lifeIndex.carWashing[0].desc
 
         weatherLayout?.visibility = View.VISIBLE
+
+    }
+
+     fun refreshWeather(){
+
+        //这里会触发LiveData
+        //我们需要修改观察LiveData的代码
+        //在重新加载完后将下拉刷新的控件关闭
+        viewModel.resfreshWeather(viewModel.locationLng,viewModel.locationLat)
+
+        //使下拉刷新出现
+        swipeRefresh?.isRefreshing = true
 
     }
 
