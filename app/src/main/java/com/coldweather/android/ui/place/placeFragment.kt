@@ -1,5 +1,7 @@
 package com.coldweather.android.ui.place
 
+
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coldweather.android.Toast
 import com.coldweather.android.databinding.FragmentPlaceBinding
+import com.coldweather.android.ui.weather.WeatherActivity
 
 class placeFragment:Fragment() {
 
@@ -56,25 +59,47 @@ class placeFragment:Fragment() {
 
         super.onActivityCreated(savedInstanceState)
 
+        if(viewModel.isSavedPlace()){
+
+            val place = viewModel.getSavedPlace()
+
+            val intent = Intent(this.context,WeatherActivity::class.java).apply {
+
+                putExtra("location_lng",place.location.lng)
+
+                putExtra("location_lat",place.location.lat)
+
+                putExtra("place_name",place.name)
+
+            }
+
+            startActivity(intent)
+
+            activity?.finish()
+
+            return
+
+        }
+
         val layoutManager = LinearLayoutManager(activity)
 
         recyclerView?.layoutManager = layoutManager
 
-         adapter = PlaceAdapter(viewModel.placeList,this)
+        adapter = PlaceAdapter(viewModel.placeList, this)
 
         recyclerView?.adapter = adapter
 
         searchPalceEdit?.addTextChangedListener {
 
-             editable->
+                editable ->
 
             val content = editable.toString().trim()
 
-            if(content.isNotEmpty()){
+            if (content.isNotEmpty()) {
 
                 viewModel.searchPlaces(content)
 
-            }else{
+            } else {
 
                 recyclerView?.visibility = View.GONE
 
@@ -88,13 +113,13 @@ class placeFragment:Fragment() {
 
         }
 
-        viewModel.placeLiveData.observe(this){
+        viewModel.placeLiveData.observe(this.viewLifecycleOwner) {
 
-            result ->
+                result ->
 
             val places = result.getOrNull()
 
-            if(places!=null){
+            if (places != null) {
 
                 recyclerView?.visibility = View.VISIBLE
 
@@ -106,19 +131,15 @@ class placeFragment:Fragment() {
 
                 adapter.notifyDataSetChanged()
 
-            }else{
+            } else {
 
-                Toast().showToast("未能查询到任何地点")
+                Toast.showToast("未能查询到任何地点")
 
                 result.exceptionOrNull()?.printStackTrace()
 
             }
 
-
         }
-
-
     }
-
 
 }

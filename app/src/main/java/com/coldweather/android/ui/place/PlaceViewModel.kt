@@ -10,6 +10,12 @@ import retrofit2.http.Query
 
 class PlaceViewModel:ViewModel() {
 
+    fun savePlace(place: Place) = Repository.savePlace(place)
+
+    fun isSavedPlace() = Repository.isPlaceSaved()
+
+    fun getSavedPlace() = Repository.getSavedPalce()
+
     val placeList = ArrayList<Place>()
 
     private val searchLiveData = MutableLiveData<String>()

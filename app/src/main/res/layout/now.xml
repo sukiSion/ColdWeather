@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nowLayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="530dp">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_height="70dp">
+
+        <!-- android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            格局语言是从左到右还是从右到左决定-->
+
+        <!-- android:singleLine="true"
+            android:ellipsize="middle"
+            设置文本单行显示并且文本过长时省略中间-->
+
+        <TextView
+            android:id="@+id/palceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textColor="#fff"
+            android:textSize="22sp">
+        </TextView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/bodyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/currentTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#fff"
+            android:textSize="70sp">
+        </TextView> `
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentSky"
+                android:textColor="#fff"
+                android:textSize="18sp">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:textSize="18sp"
+                android:textColor="#fff"
+                android:text="@string/separator">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentAQI"
+                android:layout_marginStart="13dp"
+                android:textColor="#fff"
+                android:textSize="18sp">
+            </TextView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</RelativeLayout>

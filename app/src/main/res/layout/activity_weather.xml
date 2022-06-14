@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--android:overScrollMode="never"
+滑动到边界后继续滑动不会出现阴影
+android:scrollbars="none"
+隐藏滚动条-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/weatherLayout"
+    android:scrollbars="none"
+    android:overScrollMode="never"
+    android:visibility="invisible">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/NowLayout"
+            layout="@layout/now">
+        </include>
+
+        <include
+            android:id="@+id/ForecastLayout"
+            layout="@layout/forecast">
+        </include>
+
+        <include
+            android:id="@+id/LifeIndexLayout"
+            layout="@layout/life_index">
+        </include>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>
